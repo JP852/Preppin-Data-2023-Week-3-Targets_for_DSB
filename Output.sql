@@ -14,24 +14,24 @@
 -- Calculate the Variance to Target for each row 
 
 WITH CTE AS (
+    
 SELECT
-SUM(VALUE) AS TOTAL_VALUE
-,CASE WHEN ONLINE_OR_IN_PERSON = '1' THEN 'Online' ELSE 'In-Person' END AS ONLINE_OR_IN_PERSON
-,QUARTER(DATE(transaction_date,'dd/MM/yyyy HH24:MI:SS')) AS QUARTER
-FROM PD2023_WK01 AS CTE
-WHERE LEFT(transaction_code,3) = 'DSB'
-GROUP BY 
-CASE WHEN ONLINE_OR_IN_PERSON = '1' THEN 'Online' ELSE 'In-Person' END
-,QUARTER(DATE(transaction_date,'dd/MM/yyyy HH24:MI:SS'))
-)
+    SUM(VALUE) AS TOTAL_VALUE
+    ,CASE WHEN ONLINE_OR_IN_PERSON = '1' THEN 'Online' ELSE 'In-Person' END AS ONLINE_OR_IN_PERSON
+    ,QUARTER(DATE(transaction_date,'dd/MM/yyyy HH24:MI:SS')) AS QUARTER
+        FROM PD2023_WK01 AS CTE
+            WHERE LEFT(transaction_code,3) = 'DSB'
+                GROUP BY CASE WHEN ONLINE_OR_IN_PERSON = '1' THEN 'Online' ELSE 'In-Person' END
+                    ,QUARTER(DATE(transaction_date,'dd/MM/yyyy HH24:MI:SS')))
 
-SELECT T.online_or_in_person
-,RIGHT(T.quarter,1)::int AS QUARTER
-,target
-,CTE.TOTAL_VALUE
-,CTE.TOTAL_VALUE - T.TARGET AS Variance_to_Target
-FROM PD2023_WK03_TARGETS as T
-UNPIVOT(target FOR QUARTER IN (Q1,Q2,Q3,Q4))
-INNER JOIN CTE AS CTE
-ON T.ONLINE_OR_IN_PERSON = CTE.ONLINE_OR_IN_PERSON
-AND RIGHT(T.quarter,1)::int = CTE.QUARTER
+SELECT 
+    T.online_or_in_person
+    ,RIGHT(T.quarter,1)::int AS QUARTER
+    ,target
+    ,CTE.TOTAL_VALUE
+    ,CTE.TOTAL_VALUE - T.TARGET AS Variance_to_Target
+        FROM PD2023_WK03_TARGETS as T
+            UNPIVOT(target FOR QUARTER IN (Q1,Q2,Q3,Q4))
+                INNER JOIN CTE AS CTE
+                ON T.ONLINE_OR_IN_PERSON = CTE.ONLINE_OR_IN_PERSON
+                AND RIGHT(T.quarter,1)::int = CTE.QUARTER
