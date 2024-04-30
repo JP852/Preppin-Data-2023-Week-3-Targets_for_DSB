@@ -1,10 +1,12 @@
 # Preppin-Data-2023-Week-3-Targets_for_DSB
 
-#### Link to Challenge
+![image](https://github.com/JP852/Preppin-Data-2023-Week-3-Targets_for_DSB/assets/142391590/ae584712-9463-4a17-8916-b70baa517c47)
+
+## Link to Challenge
 
 https://preppindata.blogspot.com/2023/01/2023-week-3-targets-for-dsb.html
 
-#### SQL Techniques Used
+## SQL Techniques Used
 
 - CTEs
 - Table Joins
